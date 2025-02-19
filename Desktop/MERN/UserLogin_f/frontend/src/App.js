@@ -3,7 +3,7 @@ import { useAuthContext } from './hooks/useAuthContext'
 import Home from './pages/Home';
 import StuHome from './student/StuHome';
 import ProfHome from './professor/ProfHome';
-import WeekDates from './pages/week';
+import WeekDates from './pages/WeekDates';
 
 function App() {
   const { user } = useAuthContext()
