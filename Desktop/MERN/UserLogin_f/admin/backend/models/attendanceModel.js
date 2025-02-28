@@ -10,6 +10,10 @@ const attendanceSchema = new Schema({
         type: String,
         required: true
     },
+    time: {
+        type: String,
+        required: true
+    },
     students: [
         {
             studentId : {
@@ -24,6 +28,6 @@ const attendanceSchema = new Schema({
             }
         }
     ]
-})
+}, {timestamps: true})
 
 module.exports = mongoose.model('Attendance', attendanceSchema);

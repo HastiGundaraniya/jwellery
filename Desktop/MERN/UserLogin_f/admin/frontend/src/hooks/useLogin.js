@@ -6,14 +6,14 @@ export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(null)
   const { dispatch } = useAuthContext()
 
-  const login = async (email, password, authLevel) => {
+  const login = async (email, password) => {
     setIsLoading(true)
     setError(null)
 
-    const response = await fetch('/api/user/login', {
+    const response = await fetch('/api/admin/login', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ email, password, authLevel })
+      body: JSON.stringify({ email, password })
     })
     const json = await response.json()
 
@@ -22,16 +22,15 @@ export const useLogin = () => {
       setError(json.error)
     }
     if (response.ok) {
-      // Save user data & token separately in localStorage
-      localStorage.setItem('user', JSON.stringify(json));
-      localStorage.setItem('token', json.token);  // Store token separately
-    
-      // Update the auth context
-      dispatch({ type: 'LOGIN', payload: json });
-    
-      setIsLoading(false);
+      // save the user to local storage
+      localStorage.setItem('user', JSON.stringify(json))
+
+      // update the auth context
+      dispatch({type: 'LOGIN', payload: json})
+
+      // update loading state
+      setIsLoading(false)
     }
-    
   }
   
   return { login, isLoading, error }

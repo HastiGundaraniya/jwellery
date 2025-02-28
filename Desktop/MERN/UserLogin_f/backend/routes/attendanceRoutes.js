@@ -44,7 +44,7 @@ router.post('/studata', async (req, res) => {
     }
 });
 
-router.post('/monthly', async (req, res) => {
+router.post('/total', async (req, res) => {
     const { studentId, subject } = req.body;
 
     try {
@@ -128,5 +128,46 @@ router.post('/weekly', async (req, res) => {
     }
 });
 
+router.post('/studentsAData', async (req,res) => {
+    const { subject } = req.body;
+
+    try {
+        if (!subject) {
+            res.status(400).json({ messge: "select the subject"})
+        }
+
+        const studentsData = await Attendance.aggregate(
+            [
+                {
+                  "$match": {
+                    "subject": subject
+                  }
+                },
+                {
+                  "$unwind": "$students"
+                },
+                {
+                  "$group": {
+                    "_id": "$students.studentId",  // Group by student name (change to "_id" if using student ID)
+                    "presentCount": {
+                      "$sum": {
+                        "$cond": [{ "$eq": ["$students.status", "present"] }, 1, 0]
+                      }
+                    },
+                    "absentCount": {
+                      "$sum": {
+                        "$cond": [{ "$eq": ["$students.status", "absent"] }, 1, 0]
+                      }
+                    }
+                  }
+                }
+              ]              
+        )
+        res.json(studentsData);
+    }
+    catch (error) {
+        res.status(500).json({ message: "server error"})
+    }
+})
 
 module.exports = router;

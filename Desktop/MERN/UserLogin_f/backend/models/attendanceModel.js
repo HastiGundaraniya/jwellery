@@ -24,7 +24,7 @@ const attendanceSchema = new Schema({
             }
         }
     ]
-})
+},{ timestamps: true})
 
 attendanceSchema.statics.findData = async function (date, subject) {
     if ( !date || !subject ) {

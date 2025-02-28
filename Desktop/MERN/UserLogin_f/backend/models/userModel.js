@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -18,12 +18,16 @@ const userSchema = new Schema({
     authLevel: {
         type: String,
         required: true
+    },
+    resetToken: {  // 🔹 New field to store password reset token
+        type: String,
+        default: null
     }
 });
 
-
+// Login method remains unchanged
 userSchema.statics.login = async function (email, password, authLevel) {
-    console.log("in the mongoose model")
+    
     if (!email || !password || !authLevel) {
         throw Error('All fields must be filled');
     }
@@ -34,10 +38,10 @@ userSchema.statics.login = async function (email, password, authLevel) {
         throw Error('Incorrect email');
     }
 
-    const match = await bcrypt.compare(password, user.password)
-    console.log(match)
+    const match = await bcrypt.compare(password, user.password);
+
     if (!match) {
-        throw Error('Incorrect password')
+        throw Error('Incorrect password');
     }
 
     if (user.authLevel !== authLevel) { 

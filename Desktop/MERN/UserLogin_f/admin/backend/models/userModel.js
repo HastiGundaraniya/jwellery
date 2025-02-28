@@ -7,12 +7,11 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   name: {
     type: String,
-    required: true, 
   },
   email: {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
   password: {
     type: String,
@@ -20,8 +19,12 @@ const userSchema = new Schema({
   },
   authLevel: {
     type: String,
-    required: true,
+    required: true
   },
+  resetToken: {  // 🔹 New field to store password reset token
+    type: String,
+    default: null
+  }
 });
 
 // Signup Static Method
